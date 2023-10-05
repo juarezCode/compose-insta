@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,14 +50,26 @@ import com.ju4r3z.composeinsta.R
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel) {
+
     Box(
         Modifier
             .fillMaxSize()
             .padding(8.dp)
     ) {
-        Header(Modifier.align(Alignment.TopEnd))
-        Body(loginViewModel, Modifier.align(Alignment.Center))
-        Footer(Modifier.align(Alignment.BottomCenter))
+        val isLoading by loginViewModel.isLoading.observeAsState(initial = false)
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Header(Modifier.align(Alignment.TopEnd))
+            Body(loginViewModel, Modifier.align(Alignment.Center))
+            Footer(Modifier.align(Alignment.BottomCenter))
+        }
     }
 }
 
@@ -112,7 +125,7 @@ fun Body(loginViewModel: LoginViewModel, modifier: Modifier) {
         Spacer(modifier = Modifier.size(8.dp))
         ForgotPassword(Modifier.align(Alignment.End))
         Spacer(modifier = Modifier.size(16.dp))
-        LoginButton(isLoginButtonEnabled)
+        LoginButton(isLoginButtonEnabled, loginViewModel)
         Spacer(Modifier.size(16.dp))
         LoginDivider()
         Spacer(modifier = Modifier.size(32.dp))
@@ -168,9 +181,9 @@ fun LoginDivider() {
 }
 
 @Composable
-fun LoginButton(enabled: Boolean) {
+fun LoginButton(enabled: Boolean, loginViewModel: LoginViewModel) {
     Button(
-        onClick = { },
+        onClick = { loginViewModel.onLoginSelected() },
         enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
