@@ -3,6 +3,7 @@ package com.ju4r3z.composeinsta
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -12,8 +13,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ju4r3z.composeinsta.login.ui.LoginScreen
 import com.ju4r3z.composeinsta.login.ui.LoginViewModel
 import com.ju4r3z.composeinsta.ui.theme.ComposeInstaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val loginViewModel: LoginViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen(LoginViewModel())
+                    LoginScreen(loginViewModel)
                 }
             }
         }
